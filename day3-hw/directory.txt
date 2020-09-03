@@ -1,0 +1,8 @@
+total 780456
+-rwxrwxrwx 1 pyrococci pyrococci 182276780 Sep  2 13:43 BDGP6.Ensembl.81.gtf
+-rwxrwxrwx 1 pyrococci pyrococci      8602 Sep  2 13:42 K27me3.bed
+-rwxrwxrwx 1 pyrococci pyrococci     75948 Sep  2 13:43 K4me3.bed
+-rwxrwxrwx 1 pyrococci pyrococci      5846 Sep  2 13:43 K9me3.bed
+-rwxrwxrwx 1 pyrococci pyrococci 616564462 Aug 31 13:02 SRR072893.bam
+-rwxrwxrwx 1 pyrococci pyrococci    239600 Sep  2 13:45 SRR072893.bam.bai
+-rwxrwxrwx 1 pyrococci pyrococci         0 Sep  2 14:28 directory.txt
