@@ -100,7 +100,7 @@ show-coords out.delta
 The longest alignment is 105831bp
 
 # c)
-the out.report file from question 4a) shows that query sequence has 1 insertion
+the out.report file from question 4a) shows that query sequence has 1 insertion & 5 deletions
 
 # Q5
 show-coords out.delta
@@ -123,10 +123,6 @@ samtools faidx /mnt/c/Users/Frank/jhubootcamp/qbb2020-answers/lab-week01/asm/ass
 See insertion.txt (pushed to github) for sequence
 
 # d)
+python asm/ported_decoder.py --decode --input insertion.txt --rev_comp
 
-Tried & failed coordinates:
-13854-14565
-13855-14566
-13853-14566
-14565-13854
-
+message: Congratulations to the 2020 CMDB @ JHU class!  Keep on looking for little green aliens...
