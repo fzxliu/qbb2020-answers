@@ -1,0 +1,132 @@
+# Q1 
+# a)
+
+tar zxvf asm.tgz
+samtools faidx 
+less ref.fa.fai
+
+Halomonas       233806  11      70      71
+reference genome is 233806 bp
+
+# b)
+fastqc *.fq
+
+For frag180.1.fq:
+35178 reads; read length 100bp
+For frag180.2.fq:
+35178 reads; read length 100bp
+
+For jump2k.1.fq:
+70355 reads; read length 50bp
+For jump2k.2.fq:
+70355 reads; read length 50bp
+
+# c)
+(35178*100*2+70355*50*2)/233806=~60x coverage
+
+# d)
+see *-quality.png files
+
+# Q2
+# a)
+jellyfish count -m 21 -C -s 1000000 /path/to/reads*.fq
+jellyfish histo mer_counts.jf > reads.histo
+less reads.histo
+
+1091 kmers occur 50 times
+
+# b)
+jellyfish dump mer_counts.jf -c > mer_counts_dumps.fa
+sort -nk 2 mer_counts_dumps.fa | tac | head -10
+
+GCCCACTAATTAGTGGGCGCC 105
+CGCCCACTAATTAGTGGGCGC 104
+CCCACTAATTAGTGGGCGCCG 104
+ACGGCGCCCACTAATTAGTGG 101
+CAGGCCAGCTTATAAGCTGGC 98
+AACAGGCCAGCTTATAAGCTG 98
+ACAGGCCAGCTTATAAGCTGG 97
+AGGCCAGCTTATAAGCTGGCC 95
+AGCATCGCCCACATGTGGGCG 83
+GCATCGCCCACATGTGGGCGA 82
+
+# c)
+Genome Haploid Length: 233,468 bp - 233,805 bp
+
+# d)
+The upper bound of the GenomeScope estimated genome size is 1 bp below the reference genome size.
+
+# Q3
+# a)
+grep -c '>' contigs.fasta
+
+4 contigs
+
+# b)
+samtools faidx contigs.fasta
+cut -f2 contigs.fasta.fai
+105831
+47861
+41352
+39423
+
+Total lengths is 234467bp.
+
+# c)
+sort -nk 2 contigs.fasta.fai
+
+# d)
+N50 is 47861
+
+# Q4
+# a)
+Make a seperate directory for dnadiff results in:
+/mnt/c/Users/Frank/jhubootcamp/qbb2020-answers/lab-week01/asm/
+mkdir dnadiff
+cd dnadiff
+dnadiff ../ref.fa ../assembled/contigs.fasta
+less out.report
+
+average identity is 100%
+
+# b)
+Make a seperate directory for nucmer results in:
+/mnt/c/Users/Frank/jhubootcamp/qbb2020-answers/lab-week01/asm/
+mkdir nucmer_results
+cd nucmer_results
+nucmer ../ref.fa ../assembled/contigs.fasta
+show-coords out.delta
+
+The longest alignment is 105831bp
+
+# c)
+the out.report file from question 4a) shows that query sequence has 1 insertion
+
+# Q5
+show-coords out.delta
+
+# a & b)
+    [S1]     [E1]  |     [S2]     [E2]  |  [LEN 1]  [LEN 2]  |  [% IDY]  | [TAGS]
+=====================================================================================
+  127965   233795  |   105831        1  |   105831   105831  |    99.99  | Halomonas    NODE_1_length_105831_cov_20.671456
+   40651    88511  |    47861        1  |    47861    47861  |   100.00  | Halomonas    NODE_2_length_47861_cov_20.231319
+       3    26789  |    41352    14566  |    26787    26787  |   100.00  | Halomonas    NODE_3_length_41352_cov_20.588756
+   26790    40642  |    13853        1  |    13853    13853  |   100.00  | Halomonas    NODE_3_length_41352_cov_20.588756
+   88532   127954  |    39423        1  |    39423    39423  |   100.00  | Halomonas    NODE_4_length_39423_cov_20.384723
+
+Note that NODE_3_length_41352_cov_20.588756 was aligned to the reference twice, with a gap in between
+The gap is between 1-13853bp (aligned to reference) and 14566-41352bp (also aligned) of NODE_3_length_41352_cov_20.588756
+Hence the insertion is 13854-14565bp of NODE_3_length_41352_cov_20.588756. It's 712bp long.
+
+# c) Extracting the inserted sequence
+samtools faidx /mnt/c/Users/Frank/jhubootcamp/qbb2020-answers/lab-week01/asm/assembled/contigs.fasta NODE_3_length_41352_cov_20.588756:13854-14565 > insertion.txt
+See insertion.txt (pushed to github) for sequence
+
+# d)
+
+Tried & failed coordinates:
+13854-14565
+13855-14566
+13853-14566
+14565-13854
+
