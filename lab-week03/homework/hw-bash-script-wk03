@@ -1,0 +1,45 @@
+
+# check what chromosomes are present in the vcf file
+cat BYxRM_segs_saccer3.bam.simplified.vcf | grep -v "^#" | cut -d$'\t' -f1 | sort -u > chromosomes.txt
+
+counter=0
+chr_name='chr_name.txt'
+LINES=$(cat $chr_name)
+
+# code stub:
+# for chr in $LINES
+# do
+#     echo $chr
+#     counter=$((counter+1))
+#     echo $counter
+# done
+
+# sed example:
+# sed -i 's/ChrI/1/g' hello.txt
+
+for chr in $LINES
+do
+    counter=$((counter+1))
+    sed -i "s/\b${chr}\b/${counter}/gI" BYxRM_segs_saccer3.bam.simplified.vcf
+done
+
+plink --vcf BYxRM_segs_saccer3.bam.simplified.vcf --pca --mind --chr 1-16
+
+# create a cleaned vcf file with no header for easier manipulation in python 
+cat BYxRM_segs_saccer3.bam.simplified.vcf | grep -v "^#" > cleaned_vcf.txt
+
+# replace the NA phenotype with -9
+sed -i 's/NA/-9/g' BYxRM_PhenoData.txt
+
+# make a new phenotype file with two ID columns, one FID and one IID
+cat BYxRM_PhenoData.txt | grep -v "FID" | tr -s '_' $'\t' > temp.txt
+head -1 BYxRM_PhenoData.txt > new_pheno.txt
+cat temp.txt >> new_pheno.txt
+rm temp.txt
+
+plink --vcf BYxRM_segs_saccer3.bam.simplified.vcf \
+  --pheno new_pheno.txt --all-pheno \
+  --assoc \
+  --allow-no-sex \
+  --covar plink.eigenvec \
+  --covar-number 3-13
