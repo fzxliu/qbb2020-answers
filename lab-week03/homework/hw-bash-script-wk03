@@ -43,3 +43,9 @@ plink --vcf BYxRM_segs_saccer3.bam.simplified.vcf \
   --allow-no-sex \
   --covar plink.eigenvec \
   --covar-number 3-13
+  
+# plotting with python
+for filename in *.qassoc
+do
+    python wk03-python-plotting.py "$filename"
+done
