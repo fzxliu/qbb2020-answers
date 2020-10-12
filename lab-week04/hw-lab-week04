@@ -1,0 +1,3 @@
+transeq seqdump.txt
+# named translated file translated_dump.txt
+mafft translated_dump.txt > aligned.txt
