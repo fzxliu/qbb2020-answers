@@ -1,0 +1,25 @@
+# GSM2027229 STEM-seq E4.0ICM rep1
+# SRR3083926
+
+# GSM2027231 STEM-seq E5.5Epi rep1
+# SRR3083929
+
+# index the ref genome in current folder
+bismark_genome_preparation .
+
+bismark --fastq . -1 SRR3083926_1.chr6.fastq,SRR3083929_1.chr6.fastq -2 SRR3083926_2.chr6.fastq,SRR3083929_2.chr6.fastq
+
+samtools sort -o SRR3083926.sorted.bam SRR3083926_1.chr6_bismark_bt2_pe.bam
+samtools sort -o SRR3083929.sorted.bam SRR3083929_1.chr6_bismark_bt2_pe.bam
+
+samtools index SRR3083926.sorted.bam
+samtools index SRR3083929.sorted.bam
+
+# opened IGV from app because my WSL doesn't open it from cmd
+
+mkdir extracted_sites
+cd extracted_sites
+
+bismark_methylation_extractor --comprehensive --bedGraph ../SRR3083926.sorted.bam
+bismark_methylation_extractor --comprehensive --bedGraph ../SRR3083929.sorted.bam
+
