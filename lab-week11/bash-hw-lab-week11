@@ -1,0 +1,15 @@
+conda activate hifive
+
+# loading the data
+hifive fends -L genome/mm9.len --binned 100000 partition
+hifive hic-data -X data/WT_100kb/raw_\*.mat partition interaction_counts
+hifive hic-project -f 25 -j 100000 -n 25 interaction_counts project_file
+hifive hic-normalize express -f 25 -w cis project_file
+
+
+# look for fpkm values from genes in the WT_fpkm.bed files
+grep chr13 data/WT_fpkm.bed > chr13_fpkm.bed
+bedtools intersect -wb -a chr13_fpkm.bed -b hic_comp.bed > chr13_compartment.bed
+
+# group these genes into two categories based on + or - compartment 
+# done in python
